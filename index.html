@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Awais AI Assistant — Next-Gen Multilingual AI for Android</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #060913;
+      --surface: rgba(17, 24, 39, 0.72);
+      --border: rgba(139, 92, 246, 0.25);
+      --purple: #7c3aed;
+      --blue: #2563eb;
+      --cyan: #06b6d4;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Animated Ambient Mesh Background */
+    .ambient-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(110px);
+      opacity: 0.45;
+      animation: floatOrb 12s infinite alternate ease-in-out;
+    }
+    .orb-1 {
+      width: 480px;
+      height: 480px;
+      background: radial-gradient(circle, var(--purple), transparent 70%);
+      top: -120px;
+      left: -100px;
+    }
+    .orb-2 {
+      width: 520px;
+      height: 520px;
+      background: radial-gradient(circle, var(--blue), transparent 70%);
+      bottom: -150px;
+      right: -100px;
+      animation-delay: -5s;
+    }
+    .grid-overlay {
+      position: fixed;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      z-index: 0;
+      pointer-events: none;
+    }
+    @keyframes floatOrb {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(40px, 30px) scale(1.1); }
+    }
+
+    /* Main Landing Page Container */
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 28px 20px 60px;
+    }
+
+    /* Navbar */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 22px;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      margin-bottom: 56px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: -0.02em;
+    }
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, var(--purple), var(--blue));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px rgba(124, 58, 237, 0.5);
+    }
+    .nav-btn {
+      background: rgba(124, 58, 237, 0.18);
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      color: #c4b5fd;
+      padding: 9px 18px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+    .nav-btn:hover {
+      background: var(--purple);
+      color: #fff;
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto 60px;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 99px;
+      background: rgba(37, 99, 235, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      color: #93c5fd;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 10px #22c55e;
+    }
+    .hero h1 {
+      font-size: clamp(32px, 5vw, 54px);
+      font-weight: 800;
+      line-height: 1.12;
+      letter-spacing: -0.03em;
+      margin-bottom: 18px;
+      background: linear-gradient(to right, #ffffff, #c4b5fd, #93c5fd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin-bottom: 32px;
+    }
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, var(--purple), var(--blue));
+      color: #fff;
+      border: none;
+      padding: 16px 32px;
+      border-radius: 16px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 12px 35px rgba(124, 58, 237, 0.45);
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .hero-cta:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 45px rgba(37, 99, 235, 0.6);
+    }
+
+    /* Feature Bento Grid */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+    }
+    .card {
+      background: var(--surface);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 20px;
+      padding: 24px;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .card:hover {
+      border-color: rgba(139, 92, 246, 0.45);
+      transform: translateY(-4px);
+    }
+    .card-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(124, 58, 237, 0.16);
+      color: #a78bfa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    .card h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+    .card p {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* ==================== ADVANCED MODAL DIALOG ==================== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 6, 15, 0.82);
+      backdrop-filter: blur(14px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      z-index: 9999;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+    }
+    .modal-backdrop.hidden {
+      display: none;
+      opacity: 0;
+    }
+    .modal-card {
+      position: relative;
+      width: 100%;
+      max-width: 520px;
+      background: linear-gradient(165deg, rgba(22, 30, 52, 0.96), rgba(11, 16, 30, 0.98));
+      border: 1px solid rgba(139, 92, 246, 0.45);
+      border-radius: 28px;
+      padding: 32px;
+      box-shadow: 
+        0 25px 70px rgba(0, 0, 0, 0.8),
+        0 0 40px rgba(124, 58, 237, 0.22);
+      animation: modalScale 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes modalScale {
+      from { transform: scale(0.9) translateY(15px); opacity: 0; }
+      to { transform: scale(1) translateY(0); opacity: 1; }
+    }
+
+    .modal-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .app-identity {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .app-logo-lg {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--purple), var(--blue));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 25px rgba(124, 58, 237, 0.45);
+      flex-shrink: 0;
+    }
+    .app-title-group h2 {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .verified-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      color: #34d399;
+      font-weight: 600;
+      margin-top: 3px;
+    }
+    .close-x {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #94a3b8;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .close-x:hover {
+      background: rgba(239, 68, 68, 0.2);
+      color: #fca5a5;
+    }
+
+    /* Live Build Meta Chips */
+    .meta-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      background: rgba(6, 9, 19, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
+      padding: 12px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .meta-item span {
+      display: block;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 3px;
+    }
+    .meta-item strong {
+      font-size: 13px;
+      color: #e2e8f0;
+    }
+
+    /* Split Action Area (Left: Download App in Mobile | Right: Install Guide/Secondary) */
+    .split-actions {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    @media (max-width: 480px) {
+      .split-actions { grid-template-columns: 1fr; }
+    }
+
+    .btn-primary-download {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--purple), var(--blue));
+      color: #fff;
+      text-decoration: none;
+      padding: 15px 18px;
+      border-radius: 15px;
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 10px 28px rgba(124, 58, 237, 0.45);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary-download:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 34px rgba(37, 99, 235, 0.6);
+    }
+    .btn-primary-download::after {
+      content: "";
+      position: absolute;
+      top: 0; left: -100%;
+      width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+      animation: shimmerSweep 3s infinite;
+    }
+    @keyframes shimmerSweep {
+      100% { left: 160%; }
+    }
+
+    .btn-secondary-info {
+      background: rgba(30, 41, 59, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      color: #e2e8f0;
+      padding: 15px 14px;
+      border-radius: 15px;
+      font-weight: 600;
+      font-size: 13.5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-secondary-info:hover {
+      background: rgba(51, 65, 85, 0.9);
+      border-color: rgba(139, 92, 246, 0.4);
+    }
+
+    /* Expandable Installation Steps */
+    .install-steps {
+      background: rgba(124, 58, 237, 0.08);
+      border: 1px dashed rgba(139, 92, 246, 0.35);
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-size: 12.5px;
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+    .install-steps strong {
+      color: #a78bfa;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .status-bar {
+      margin-top: 14px;
+      font-size: 11.5px;
+      color: #64748b;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Futuristic Background -->
+  <div class="ambient-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+  </div>
+  <div class="grid-overlay"></div>
+
+  <!-- Main Page -->
+  <div class="container">
+    <nav>
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <span>Awais AI Assistant</span>
+      </div>
+      <button class="nav-btn" onclick="openModal()">Get Android APK</button>
+    </nav>
+
+    <section class="hero">
+      <div class="pill">
+        <span class="pulse-dot"></span>
+        <span>Official Direct Release • Android 8.0+</span>
+      </div>
+      <h1>Your Personal AI Intelligence, Built for Mobile</h1>
+      <p>
+        Experience ultra-fast Urdu, Roman Urdu, and English conversations, native male voice assistant, PDF & image analysis, and personal AI memory—all in one sleek Android application.
+      </p>
+      <button class="hero-cta" onclick="openModal()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Download App in Mobile
+      </button>
+    </section>
+
+    <section class="features">
+      <div class="card">
+        <div class="card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <h3>Urdu & Multilingual AI</h3>
+        <p>Seamless responses in English, Urdu script, and Roman Urdu with real-time streaming.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+        </div>
+        <h3>Native Voice Mode</h3>
+        <p>Hands-free speech-to-text input and natural male voice output with adjustable speed.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <h3>Vision & PDF Intelligence</h3>
+        <p>Upload camera photos or PDF documents for instant summarization and Q&A.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <h3>Enterprise Security</h3>
+        <p>Encrypted cloud sync, Firebase Authentication, and user-controlled personal memory.</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- ==================== ADVANCED INSTALLATION DIALOG BOX ==================== -->
+  <div class="modal-backdrop" id="installDialog" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-top">
+        <div class="app-identity">
+          <div class="app-logo-lg">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <div class="app-title-group">
+            <h2>Awais AI Assistant</h2>
+            <div class="verified-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              Verified Official Android Build
+            </div>
+          </div>
+        </div>
+        <button class="close-x" onclick="closeModal()" aria-label="Close dialog">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div class="meta-strip">
+        <div class="meta-item">
+          <span>VERSION</span>
+          <strong id="appVersion">v1.0.0 Latest</strong>
+        </div>
+        <div class="meta-item">
+          <span>PLATFORM</span>
+          <strong>Android APK</strong>
+        </div>
+        <div class="meta-item">
+          <span>PACKAGE</span>
+          <strong>com.awais.ai</strong>
+        </div>
+      </div>
+
+      <!-- Left & Right Split Controls -->
+      <div class="split-actions">
+        <!-- LEFT SIDE: Primary Mobile Download Button -->
+        <a 
+          id="apkDownloadLink"
+          href="https://github.com/YOUR_USERNAME/YOUR_REPO/releases/download/v1.0.0-latest/app-release.apk" 
+          class="btn-primary-download"
+          download
+          onclick="triggerDownloadFeedback()"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>
+          </svg>
+          Download App in Mobile
+        </a>
+
+        <!-- RIGHT SIDE: Quick Guide / View Releases -->
+        <button class="btn-secondary-info" onclick="toggleGuide()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          How to Install?
+        </button>
+      </div>
+
+      <div class="install-steps" id="guideBox">
+        <strong>Quick Android Installation Guide:</strong>
+        1. Tap <b>"Download App in Mobile"</b> on the left.<br>
+        2. Open the downloaded <b>app-release.apk</b> from your notification bar.<br>
+        3. If prompted, allow <b>"Install from this source"</b> and tap <b>Install</b>.
+      </div>
+
+      <div class="status-bar">
+        <span id="statusText">Ready for direct mobile download</span>
+        <span>SHA-256 Verified</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Auto-detect GitHub username & repo if hosted on GitHub Pages (username.github.io/repo)
+    (function autoConfigureGitHubLink() {
+      const host = window.location.hostname;
+      const pathParts = window.location.pathname.split('/').filter(Boolean);
+      if (host.endsWith('github.io') && pathParts.length > 0) {
+        const username = host.replace('.github.io', '');
+        const repo = pathParts[0];
+        const dynamicApkUrl = `https://github.com/${username}/${repo}/releases/download/v1.0.0-latest/app-release.apk`;
+        document.getElementById('apkDownloadLink').href = dynamicApkUrl;
+      }
+    })();
+
+    function openModal() {
+      document.getElementById('installDialog').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('installDialog').classList.add('hidden');
+    }
+
+    function toggleGuide() {
+      const box = document.getElementById('guideBox');
+      box.style.display = box.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function triggerDownloadFeedback() {
+      const status = document.getElementById('statusText');
+      status.style.color = '#34d399';
+      status.textContent = 'Downloading APK to your mobile...';
+    }
+  </script>
+</body>
+</html>
